@@ -336,16 +336,23 @@ function CatchCard({ stream }: { stream: typeof CATCH_STREAMS[0] }) {
   );
 }
 
+const GRADIENT_COLORS = [
+  "from-blue-500/30 via-blue-600/20 to-black/60",
+  "from-purple-500/30 via-purple-600/20 to-black/60",
+  "from-pink-500/30 via-pink-600/20 to-black/60",
+  "from-cyan-500/30 via-cyan-600/20 to-black/60",
+  "from-orange-500/30 via-orange-600/20 to-black/60",
+  "from-red-500/30 via-red-600/20 to-black/60",
+];
+
 function StreamerCard({ streamer }: { streamer: typeof RECOMMENDED_STREAMERS[0] }) {
   const [isFollowing, setIsFollowing] = useState(false);
+  const gradientClass = GRADIENT_COLORS[streamer.id % GRADIENT_COLORS.length];
 
   return (
     <div className="flex flex-col shrink-0 w-[148px] rounded-[16px] overflow-hidden bg-[#1e2028] drop-shadow-[0px_4px_12px_rgba(0,0,0,0.3)]">
-      {/* Background image area */}
-      <div className="relative h-[160px] overflow-hidden">
-        <img alt="" className="absolute inset-0 w-full h-full object-cover" src={streamer.bgImage} />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60" />
-      </div>
+      {/* Background gradient area */}
+      <div className={`relative h-[160px] overflow-hidden bg-gradient-to-b ${gradientClass}`}></div>
       {/* Profile and info area */}
       <div className="flex flex-col items-center px-[12px] pb-[16px] -mt-[32px] relative z-10">
         <div className="size-[64px] rounded-full overflow-hidden border-[3px] border-[#1e2028] mb-[8px]">
@@ -364,6 +371,61 @@ function StreamerCard({ streamer }: { streamer: typeof RECOMMENDED_STREAMERS[0] 
         >
           {isFollowing ? "팔로잉" : "Follow"}
         </button>
+      </div>
+    </div>
+  );
+}
+
+function AutoPlaySlider() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % LIVE_STREAMS.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const stream = LIVE_STREAMS[currentIndex];
+
+  return (
+    <div className="relative w-full aspect-[336/224] overflow-hidden rounded-[20px] drop-shadow-[0px_10px_20px_rgba(0,0,0,0.08)]">
+      <img alt="" className="absolute inset-0 w-full h-full object-cover" src={stream.thumbnail} />
+
+      {/* Dark overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+
+      {/* Live Badge */}
+      <div className="absolute top-[8px] left-[8px] bg-[rgba(23,25,28,0.8)] flex gap-[5px] items-center px-[6px] py-[1.5px] rounded-[10px]">
+        <div className="relative shrink-0 size-[6px]">
+          <svg className="absolute block inset-0 size-full" fill="none" viewBox="0 0 6 6">
+            <circle cx="3" cy="3" fill="#FF2F00" r="3" />
+          </svg>
+        </div>
+        <p className="font-['Pretendard:SemiBold',sans-serif] text-[14px] text-white whitespace-nowrap">{formatViewers(stream.viewers)}</p>
+      </div>
+
+      {/* Streamer Info */}
+      <div className="absolute bottom-0 left-0 right-0 p-[12px] flex items-center gap-[8px]">
+        <div className="size-[40px] rounded-full overflow-hidden border-2 border-white">
+          <img alt="" className="w-full h-full object-cover" src={profileImages[stream.profileImg]} />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="font-['Pretendard:SemiBold',sans-serif] text-[13px] text-white">{stream.streamer}</p>
+          <p className="font-['Pretendard:Regular',sans-serif] text-[11px] text-[#acb0b9] line-clamp-1">{stream.title}</p>
+        </div>
+      </div>
+
+      {/* Dots indicator */}
+      <div className="absolute bottom-[8px] right-[12px] flex gap-[4px]">
+        {LIVE_STREAMS.map((_, i) => (
+          <div
+            key={i}
+            className={`h-[6px] rounded-full transition-all ${
+              i === currentIndex ? "w-[16px] bg-white" : "w-[6px] bg-[rgba(255,255,255,0.4)]"
+            }`}
+          />
+        ))}
       </div>
     </div>
   );
@@ -482,7 +544,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState(0);
   const [activeStream, setActiveStream] = useState<typeof LIVE_STREAMS[0] | null>(null);
   const [bottomNav, setBottomNav] = useState(0);
-  const [selectedChip, setSelectedChip] = useState(0);
+  const [selectedChip, setSelectedChip] = useState(1);
 
   if (activeStream) {
     return (
@@ -557,7 +619,9 @@ export default function App() {
 
         {/* Scrollable content */}
         <div className="flex-1 overflow-y-auto" style={{ overscrollBehavior: "contain", scrollbarWidth: "none", msOverflowStyle: "none" }} onScroll={(e) => { (e.target as any).style.setProperty('scrollbar-width', 'none'); }}>
-          {/* Banner */}
+          {selectedChip === 0 && (
+            <>
+          {/* Exploration Tab Content - Banner */}
           <div className="px-[12px] pt-[12px]">
             <div className="bg-[#c0c5d0] h-[100px] rounded-[20px] overflow-hidden relative flex items-center justify-center">
               <img alt="" className="h-[110px] object-contain" src={img11} />
@@ -652,6 +716,190 @@ export default function App() {
               ))}
             </div>
           </div>
+            </>
+          )}
+
+          {selectedChip === 1 && (
+            <>
+              {/* Recommendation Tab - Same as Exploration but with auto-play slider at top */}
+
+              {/* Banner */}
+              <div className="px-[12px] pt-[12px]">
+                <div className="bg-[#c0c5d0] h-[100px] rounded-[20px] overflow-hidden relative flex items-center justify-between px-[20px]">
+                  <div className="flex-1"></div>
+                  <div className="absolute right-0 top-1/2 -translate-y-1/2 pr-[8px]">
+                    <img alt="" className="h-[140px] object-contain" src={img11} />
+                  </div>
+                </div>
+              </div>
+
+              {/* Auto-play Slider */}
+              <div className="px-[12px] pt-[16px] pb-[12px]">
+                <AutoPlaySlider />
+              </div>
+
+              {/* Profile row */}
+              <div className="pt-[8px] pb-[8px]">
+                <div className="flex gap-[10px] items-start px-[12px] overflow-x-auto" style={{ scrollbarWidth: "none" }}>
+                  {STREAMERS.map((s, i) => (
+                    <div key={i} className="flex flex-col gap-[4px] items-center shrink-0">
+                      <GradientCircle src={profileImages[s.profile]} />
+                      <p className="font-['Pretendard:Medium',sans-serif] text-[#acb0b9] text-[12px] text-center whitespace-nowrap">{s.nick}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Live section 1 */}
+              <div className="pt-[8px]">
+                <div className="flex items-center justify-between px-[12px] py-[8px]">
+                  <span className="font-['Pretendard:SemiBold',sans-serif] text-white text-[18px]">라이브 추천</span>
+                </div>
+                <div className="flex flex-col gap-[12px] px-[12px]">
+                  {LIVE_STREAMS.slice(0, 2).map((stream) => (
+                    <StreamCard key={stream.id} stream={stream} onClick={() => setActiveStream(stream)} />
+                  ))}
+                </div>
+              </div>
+
+              {/* Category section */}
+              <div className="pt-[20px]">
+                <div className="flex items-center justify-between px-[12px] py-[8px]">
+                  <span className="font-['Pretendard:SemiBold',sans-serif] text-white text-[18px]">카테고리</span>
+                </div>
+                <div className="flex gap-[12px] items-start px-[12px] overflow-x-auto pb-[4px]" style={{ scrollbarWidth: "none" }}>
+                  {CATEGORIES.map((cat, i) => (
+                    <CategoryCard key={i} cat={cat} />
+                  ))}
+                </div>
+              </div>
+
+              {/* Live section 2 */}
+              <div className="pt-[20px]">
+                <div className="flex items-center justify-between px-[12px] py-[8px]">
+                  <div className="flex items-center gap-[4px]">
+                    <div className="size-[10px] bg-[#0182FF] rounded-full flex items-center justify-center">
+                      <svg width="6" height="7" fill="none" viewBox="0 0 19 20.002">
+                        <path d={svgPaths.p3bd65980} fill="#0182FF" />
+                      </svg>
+                    </div>
+                    <span className="font-['Pretendard:SemiBold',sans-serif] text-white text-[18px]">Live</span>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-[12px] px-[12px]">
+                  {LIVE_STREAMS.slice(2).map((stream) => (
+                    <StreamCard key={stream.id} stream={stream} onClick={() => setActiveStream(stream)} />
+                  ))}
+                </div>
+              </div>
+
+              {/* Catch section */}
+              <div className="pt-[20px]">
+                <div className="flex items-center justify-between px-[12px] py-[8px]">
+                  <span className="font-['Pretendard:SemiBold',sans-serif] text-white text-[18px]">추천 Catch</span>
+                </div>
+                <div className="flex gap-[12px] items-start px-[12px] overflow-x-auto pb-[4px]" style={{ scrollbarWidth: "none" }}>
+                  {CATCH_STREAMS.map((stream, i) => (
+                    <CatchCard key={i} stream={stream} />
+                  ))}
+                </div>
+              </div>
+
+              {/* More button */}
+              <div className="px-[12px] pt-[16px] pb-[12px]">
+                <div className="bg-[#1e2028] rounded-[16px] flex flex-col items-center gap-[12px] py-[20px]">
+                  <p className="font-['Pretendard:Regular',sans-serif] text-[#acb0b9] text-[15px]">더 많은 방송이 보고 싶다면?</p>
+                  <button className="bg-[#2a2d35] h-[34px] px-[16px] rounded-[17px]">
+                    <span className="font-['Pretendard:SemiBold',sans-serif] text-white text-[13px]">전체 방송 가기</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Recommended Streamers */}
+              <div className="pt-[20px] pb-[24px]">
+                <div className="flex items-center justify-between px-[12px] py-[8px]">
+                  <span className="font-['Pretendard:SemiBold',sans-serif] text-white text-[18px]">추천 스트리머</span>
+                </div>
+                <div className="flex gap-[12px] items-start px-[12px] overflow-x-auto pb-[4px]" style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}>
+                  {RECOMMENDED_STREAMERS.map((streamer) => (
+                    <StreamerCard key={streamer.id} streamer={streamer} />
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+
+          {selectedChip === 2 && (
+            <>
+              {/* Issue Tab */}
+              {/* Issue Sections */}
+              <div className="pt-[16px] pb-[24px]">
+                {/* Section 1 */}
+                <div className="pt-[8px]">
+                  <div className="px-[12px] py-[8px]">
+                    <span className="font-['Pretendard:SemiBold',sans-serif] text-white text-[16px]">살짝 먹네요</span>
+                  </div>
+                  <div className="flex flex-col gap-[12px] px-[12px]">
+                    {LIVE_STREAMS.slice(0, 2).map((stream) => (
+                      <StreamCard key={stream.id} stream={stream} onClick={() => setActiveStream(stream)} />
+                    ))}
+                  </div>
+                </div>
+
+                {/* Section 2 */}
+                <div className="pt-[20px]">
+                  <div className="px-[12px] py-[8px]">
+                    <span className="font-['Pretendard:SemiBold',sans-serif] text-white text-[16px]">뜨는 콘텐츠</span>
+                  </div>
+                  <div className="flex flex-col gap-[12px] px-[12px]">
+                    {LIVE_STREAMS.slice(1, 3).map((stream) => (
+                      <StreamCard key={stream.id} stream={stream} onClick={() => setActiveStream(stream)} />
+                    ))}
+                  </div>
+                </div>
+
+                {/* Section 3 */}
+                <div className="pt-[20px]">
+                  <div className="px-[12px] py-[8px]">
+                    <span className="font-['Pretendard:SemiBold',sans-serif] text-white text-[16px]">주목할 만한</span>
+                  </div>
+                  <div className="flex flex-col gap-[12px] px-[12px]">
+                    {LIVE_STREAMS.slice(2, 4).map((stream) => (
+                      <StreamCard key={stream.id} stream={stream} onClick={() => setActiveStream(stream)} />
+                    ))}
+                  </div>
+                </div>
+
+                {/* Section 4 */}
+                <div className="pt-[20px]">
+                  <div className="px-[12px] py-[8px]">
+                    <span className="font-['Pretendard:SemiBold',sans-serif] text-white text-[16px]">실시간 인기</span>
+                  </div>
+                  <div className="flex flex-col gap-[12px] px-[12px]">
+                    {LIVE_STREAMS.map((stream) => (
+                      <StreamCard key={stream.id} stream={stream} onClick={() => setActiveStream(stream)} />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+
+          {selectedChip === 3 && (
+            <>
+              {/* Live Tab */}
+              <div className="pt-[20px] pb-[24px]">
+                <div className="px-[12px] py-[8px]">
+                  <span className="font-['Pretendard:SemiBold',sans-serif] text-white text-[18px]">LIVE 전체</span>
+                </div>
+                <div className="flex flex-col gap-[12px] px-[12px]">
+                  {LIVE_STREAMS.map((stream) => (
+                    <StreamCard key={stream.id} stream={stream} onClick={() => setActiveStream(stream)} />
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
         </div>
 
         {/* Bottom nav */}
