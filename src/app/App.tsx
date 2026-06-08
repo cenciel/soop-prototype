@@ -834,52 +834,10 @@ export default function App() {
               {/* Issue Tab */}
               {/* Issue Sections */}
               <div className="pt-[16px] pb-[24px]">
-                {/* Section 1 */}
-                <div className="pt-[8px]">
-                  <div className="px-[12px] py-[8px]">
-                    <span className="font-['Pretendard:SemiBold',sans-serif] text-white text-[16px]">살짝 먹네요</span>
-                  </div>
-                  <div className="flex flex-col gap-[12px] px-[12px]">
-                    {LIVE_STREAMS.slice(0, 2).map((stream) => (
-                      <StreamCard key={stream.id} stream={stream} onClick={() => setActiveStream(stream)} />
-                    ))}
-                  </div>
-                </div>
-
-                {/* Section 2 */}
-                <div className="pt-[20px]">
-                  <div className="px-[12px] py-[8px]">
-                    <span className="font-['Pretendard:SemiBold',sans-serif] text-white text-[16px]">뜨는 콘텐츠</span>
-                  </div>
-                  <div className="flex flex-col gap-[12px] px-[12px]">
-                    {LIVE_STREAMS.slice(1, 3).map((stream) => (
-                      <StreamCard key={stream.id} stream={stream} onClick={() => setActiveStream(stream)} />
-                    ))}
-                  </div>
-                </div>
-
-                {/* Section 3 */}
-                <div className="pt-[20px]">
-                  <div className="px-[12px] py-[8px]">
-                    <span className="font-['Pretendard:SemiBold',sans-serif] text-white text-[16px]">주목할 만한</span>
-                  </div>
-                  <div className="flex flex-col gap-[12px] px-[12px]">
-                    {LIVE_STREAMS.slice(2, 4).map((stream) => (
-                      <StreamCard key={stream.id} stream={stream} onClick={() => setActiveStream(stream)} />
-                    ))}
-                  </div>
-                </div>
-
-                {/* Section 4 */}
-                <div className="pt-[20px]">
-                  <div className="px-[12px] py-[8px]">
-                    <span className="font-['Pretendard:SemiBold',sans-serif] text-white text-[16px]">실시간 인기</span>
-                  </div>
-                  <div className="flex flex-col gap-[12px] px-[12px]">
-                    {LIVE_STREAMS.map((stream) => (
-                      <StreamCard key={stream.id} stream={stream} onClick={() => setActiveStream(stream)} />
-                    ))}
-                  </div>
+                <div className="flex flex-col gap-[12px] px-[12px]">
+                  {LIVE_STREAMS.map((stream) => (
+                    <StreamCard key={stream.id} stream={stream} onClick={() => setActiveStream(stream)} />
+                  ))}
                 </div>
               </div>
             </>
