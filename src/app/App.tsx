@@ -525,7 +525,7 @@ function LivePlayerModal({ stream, onClose }: { stream: typeof LIVE_STREAMS[0]; 
 
       {/* Chat area */}
       <div className="flex-1 overflow-y-auto px-[12px] py-[8px] flex flex-col gap-[4px] bg-[#17191c]" style={{ minHeight: 0 }}>
-        <p className="font-['Pretendard:SemiBold',sans-serif] text-[#63a4e7] text-[13px] mb-[4px]">마이민 방송에 참여해보세요.</p>
+        <p className="font-['Pretendard:SemiBold',sans-serif] text-[#63a4e7] text-[13px] mb-[4px]">라이브 채팅</p>
         {messages.map((msg, i) => (
           <div key={i} className="flex gap-[4px] items-start">
             <span className="font-['Pretendard:Medium',sans-serif] text-[13px] shrink-0 max-w-[80px] truncate" style={{ color: msg.color }}>{msg.nick}</span>
@@ -536,20 +536,36 @@ function LivePlayerModal({ stream, onClose }: { stream: typeof LIVE_STREAMS[0]; 
       </div>
 
       {/* Chat input */}
-      <div className="shrink-0 flex items-center gap-[8px] px-[12px] py-[10px] border-t border-[#2a2d35] bg-[#17191c]">
+      <div className="shrink-0 flex items-center gap-[12px] px-[12px] py-[12px] border-t border-[#2a2d35] bg-[#17191c]">
+        {/* Gift icon */}
+        <button className="shrink-0 text-[#757b8a] hover:text-white transition-colors">
+          <svg width="19" height="20" viewBox="0 0 19 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18.1 12.1C18.1 10.3 18 8.6 17.9 7.3C17.8 6.3 17.3 5.4 16.5 4.9C16.7 4.5 16.8 4 16.8 3.6C16.8 1.6 15.2 0 13.2 0C11.3 0 9.8 1.2 8.9 2.6C8 1.2 6.4 0 4.6 0C2.6 0 1 1.6 1 3.6C1 4.1 1.1 4.6 1.3 5.1C0.7 5.6 0.3 6.4 0.2 7.3C0.1 8.7 0 10.3 0 12.1C0 13.9 0.1 15.6 0.2 16.9C0.3 18.4 1.4 19.6 2.8 19.7C4 19.9 6 20 9 20C12 20 14 19.9 15.2 19.8C16.6 19.7 17.7 18.5 17.8 17C18 15.6 18.1 14 18.1 12.1ZM3 6.5C4 6.4 5.6 6.3 7.9 6.3V11.2H2C2 9.8 2.1 8.6 2.2 7.5C2.2 6.9 2.5 6.5 3 6.5ZM9.9 6.2C12.3 6.2 14 6.3 15.1 6.4C15.5 6.4 15.9 6.8 15.9 7.4C16 8.5 16 9.8 16 11.1H9.8V6.2H9.9ZM13.2 2C14.1 2 14.8 2.7 14.8 3.6C14.8 3.9 14.7 4.2 14.6 4.4C13.6 4.3 12.2 4.2 10.3 4.2C10.8 3.2 11.8 2 13.2 2ZM4.6 2C6 2 7 3.2 7.6 4.3C5.7 4.3 4.3 4.4 3.3 4.5C3.1 4.2 3 3.9 3 3.6C3 2.7 3.7 2 4.6 2ZM2.2 16.8C2.1 15.7 2 14.5 2 13.1H7.9V18C5.6 18 4 17.9 3 17.8C2.5 17.7 2.2 17.3 2.2 16.8ZM15.1 17.8C14.1 17.9 12.4 18 9.9 18V13.1H16.1C16.1 14.5 16 15.7 15.9 16.8C15.8 17.3 15.5 17.7 15.1 17.8Z" fill="currentColor"/>
+          </svg>
+        </button>
+
+        {/* Chat input */}
         <input
-          className="flex-1 bg-[#2a2d35] rounded-[20px] px-[14px] py-[8px] font-['Pretendard:Regular',sans-serif] text-[14px] text-white outline-none placeholder:text-[#757b8a]"
-          placeholder="채팅 메시지 입력..."
+          className="flex-1 bg-transparent text-white outline-none placeholder:text-[#757b8a] font-['Pretendard:Regular',sans-serif] text-[14px]"
+          placeholder="채팅 입력"
           value={chatInput}
           onChange={(e) => setChatInput(e.target.value)}
           onKeyDown={(e) => { if (e.key === "Enter") sendChat(); }}
         />
-        <button
-          onClick={sendChat}
-          className="shrink-0 text-white rounded-full px-[14px] py-[8px] font-['Pretendard:SemiBold',sans-serif] text-[13px]"
-          style={{ backgroundImage: "linear-gradient(109deg, #0082FF 0%, #00F0FF 50%, #82FFB0 100%)" }}
-        >
-          전송
+
+        {/* Emoji icon */}
+        <button className="shrink-0 text-[#757b8a] hover:text-white transition-colors">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C17.5227 2 22 6.47727 22 12C22 17.5227 17.5227 22 12 22C6.47727 22 2 17.5227 2 12C2 6.47727 6.47727 2 12 2ZM12 4C7.58184 4 4 7.58184 4 12C4 16.4182 7.58184 20 12 20C16.4182 20 20 16.4182 20 12C20 7.58184 16.4182 4 12 4ZM8.47754 8.625C9.27987 8.6252 9.92962 9.27479 9.92969 10.0771C9.92969 10.8786 9.28001 11.5291 8.47754 11.5293C7.67582 11.5293 7.02539 10.8789 7.02539 10.0771C7.02546 9.27457 7.67596 8.625 8.47754 8.625ZM15.5273 8.625C16.3289 8.62506 16.9794 9.27461 16.9795 10.0771C16.9795 10.8788 16.329 11.5292 15.5273 11.5293C14.7247 11.5293 14.0752 10.8788 14.0752 10.0771C14.0753 9.27467 14.7248 8.625 15.5273 8.625Z" fill="currentColor"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M15.1283 13.6438C15.4087 13.1652 16.0222 13.01 16.4953 13.2882C16.9743 13.568 17.1302 14.1826 16.8499 14.6568C16.2218 15.7242 14.7152 17.6379 11.9989 17.6379C9.28548 17.6379 7.77892 15.7261 7.15032 14.6608L7.15124 14.6623C6.86808 14.1864 7.02777 13.5725 7.50332 13.2928L7.50545 13.2915C7.97647 13.0176 8.58859 13.1673 8.8709 13.6452C9.34213 14.4431 10.3301 15.6397 11.9989 15.6397C13.6699 15.6397 14.6586 14.4411 15.1289 13.6428L15.1283 13.6438Z" fill="currentColor"/>
+          </svg>
+        </button>
+
+        {/* Like icon */}
+        <button className="shrink-0 text-[#757b8a] hover:text-white transition-colors" onClick={sendChat}>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M4.82291 7.33754L7.07692 1.92792L7.08619 1.90639C7.67017 0.592435 8.9905 -0.12162 10.3951 0.0170516C12.0495 0.169752 13.2 1.53987 13.2 3.21253V5.61253H17C18.7479 5.61253 20.337 7.22098 19.876 9.13102L18.3806 16.5086L18.3803 16.5103C17.9867 18.4744 16.2786 19.9125 14.2 19.9125H8.9L8.86921 19.9126C8.69655 19.9133 8.34601 19.9148 7.97285 19.7615L6.07713 19.2876C5.73076 19.2139 5.43311 19.0632 5.19271 18.8584C4.95135 18.9568 4.68547 19.0124 4.4 19.0124H3.2C1.44772 19.0124 0 17.5647 0 15.8124V10.5124C0 8.76013 1.44772 7.31241 3.2 7.31241H4.5C4.60971 7.31241 4.71756 7.321 4.82291 7.33754ZM6.5 8.51253L8.91794 2.70948C9.13527 2.23041 9.61048 1.94857 10.2005 2.00757L10.2095 2.00842C10.7526 2.0578 11.2 2.48671 11.2 3.21253V6.11253C11.2 6.48978 11.3301 6.88186 11.6304 7.18214C11.9307 7.48242 12.3228 7.61253 12.7 7.61253H17C17.6448 7.61253 18.0497 8.19057 17.9299 8.67C17.9262 8.68454 17.9229 8.69917 17.9199 8.71387L16.4199 16.1139L16.4194 16.1164C16.2124 17.1514 15.3208 17.9125 14.2 17.9125H8.9C8.8474 17.9125 8.81302 17.9124 8.78123 17.9115C8.75363 17.9106 8.73676 17.9092 8.72649 17.908C8.66748 17.8802 8.60587 17.8582 8.54254 17.8424L6.54254 17.3424C6.53726 17.3411 6.53198 17.3398 6.52668 17.3386C6.55178 17.2521 6.57176 17.1646 6.58639 17.0768C6.59545 17.0225 6.6 16.9675 6.6 16.9124V9.41241C6.6 9.19066 6.5649 8.97649 6.5 8.77518V8.51253ZM4.5 9.31241H3.2C2.55228 9.31241 2 9.8647 2 10.5124V15.8124C2 16.4601 2.55228 17.0124 3.2 17.0124H4.4C4.41296 17.0124 4.44931 17.0081 4.5 16.9612V9.31241Z" fill="currentColor"/>
+          </svg>
         </button>
       </div>
     </div>
