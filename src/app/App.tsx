@@ -345,9 +345,17 @@ const GRADIENT_COLORS = [
   "from-red-500/30 via-red-600/20 to-black/60",
 ];
 
-function StreamerCard({ streamer }: { streamer: typeof RECOMMENDED_STREAMERS[0] }) {
+function StreamerCard({ streamer, onStreamClick }: { streamer: typeof RECOMMENDED_STREAMERS[0]; onStreamClick?: (stream: typeof LIVE_STREAMS[0]) => void }) {
   const [isFollowing, setIsFollowing] = useState(false);
   const gradientClass = GRADIENT_COLORS[streamer.id % GRADIENT_COLORS.length];
+  const isLive = [1, 3, 5].includes(streamer.id);
+
+  const handleProfileClick = () => {
+    if (isLive && onStreamClick) {
+      const liveStreamIndex = (streamer.id - 1) % LIVE_STREAMS.length;
+      onStreamClick(LIVE_STREAMS[liveStreamIndex]);
+    }
+  };
 
   return (
     <div className="flex flex-col shrink-0 w-[148px] rounded-[16px] overflow-hidden bg-[#1e2028] drop-shadow-[0px_4px_12px_rgba(0,0,0,0.3)]">
@@ -355,9 +363,31 @@ function StreamerCard({ streamer }: { streamer: typeof RECOMMENDED_STREAMERS[0] 
       <div className={`relative h-[160px] overflow-hidden bg-gradient-to-b ${gradientClass}`}></div>
       {/* Profile and info area */}
       <div className="flex flex-col items-center px-[12px] pb-[16px] -mt-[32px] relative z-10">
-        <div className="size-[64px] rounded-full overflow-hidden border-[3px] border-[#1e2028] mb-[8px]">
-          <img alt="" className="w-full h-full object-cover" src={(streamer as any).profileImg || profileImages[streamer.profile]} />
-        </div>
+        {isLive ? (
+          <button onClick={handleProfileClick} className="relative shrink-0 size-[72px] mb-[8px] cursor-pointer active:scale-95 transition-transform">
+            <div className="absolute left-[2px] size-[68px] top-[2px]">
+              <div className="absolute inset-[-2.94%]">
+                <svg className="block size-full" fill="none" viewBox="0 0 72 72">
+                  <circle cx="36" cy="36" r="35" stroke="url(#grad_circle_streamer)" strokeWidth="2" />
+                  <defs>
+                    <linearGradient gradientUnits="userSpaceOnUse" id="grad_circle_streamer" x1="8.94688" x2="84.7922" y1="-1.23644" y2="32.279">
+                      <stop stopColor="#0082FF" />
+                      <stop offset="0.56" stopColor="#05BCFF" />
+                      <stop offset="0.94" stopColor="#82FFB0" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
+            </div>
+            <div className="absolute left-[5px] size-[62px] top-[5px] overflow-hidden rounded-full">
+              <img alt="" className="absolute inset-0 w-full h-full object-cover" src={(streamer as any).profileImg || profileImages[streamer.profile]} />
+            </div>
+          </button>
+        ) : (
+          <div className="size-[64px] rounded-full overflow-hidden border-[3px] border-[#1e2028] mb-[8px]">
+            <img alt="" className="w-full h-full object-cover" src={(streamer as any).profileImg || profileImages[streamer.profile]} />
+          </div>
+        )}
         <p className="font-['Pretendard:SemiBold',sans-serif] text-[14px] text-white mb-[8px] text-center truncate w-full">
           {streamer.name}
         </p>
@@ -528,6 +558,23 @@ function LivePlayerModal({ stream, onClose }: { stream: typeof LIVE_STREAMS[0]; 
 
 const NAV_TABS = ["라이브", "팔로잉", "카테고리", "MY"];
 
+function NavIcon({ icon, color }: { icon: string; color: string }) {
+  const iconMap: { [key: string]: { viewBox: string; path: string } } = {
+    home: { viewBox: "0 0 18 19", path: svgPaths.p30c34280 },
+    esports: { viewBox: "0 0 21 20", path: svgPaths.p15b94980 },
+    catch: { viewBox: "0 0 20 19", path: svgPaths.p3ad03b00 },
+    my: { viewBox: "0 0 20 19", path: svgPaths.p35b30380 },
+    more: { viewBox: "0 0 18 20", path: svgPaths.p2024ee00 },
+  };
+
+  const data = iconMap[icon];
+  return (
+    <svg width="20" height="20" viewBox={data.viewBox} fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d={data.path} fill={color} fillRule="evenodd" clipRule="evenodd" />
+    </svg>
+  );
+}
+
 const TOP_CHIPS = ["탐색", "추천", "이슈", "라이브"];
 
 const RECOMMENDED_STREAMERS = [
@@ -631,12 +678,23 @@ export default function App() {
           {/* Profile row */}
           <div className="pt-[16px] pb-[8px]">
             <div className="flex gap-[10px] items-start px-[12px] overflow-x-auto" style={{ scrollbarWidth: "none" }}>
-              {STREAMERS.map((s, i) => (
-                <div key={i} className="flex flex-col gap-[4px] items-center shrink-0">
-                  <GradientCircle src={profileImages[s.profile]} />
-                  <p className="font-['Pretendard:Medium',sans-serif] text-[#acb0b9] text-[12px] text-center whitespace-nowrap">{s.nick}</p>
-                </div>
-              ))}
+              {STREAMERS.map((s, i) => {
+                const isLiveStreamer = LIVE_STREAMS.some(stream => stream.profileImg === s.profile);
+                const liveStream = LIVE_STREAMS.find(stream => stream.profileImg === s.profile);
+                return (
+                  <button
+                    key={i}
+                    onClick={() => {
+                      if (isLiveStreamer && liveStream) setActiveStream(liveStream);
+                    }}
+                    disabled={!isLiveStreamer}
+                    className="flex flex-col gap-[4px] items-center shrink-0 bg-none border-none p-0 cursor-pointer disabled:cursor-default"
+                  >
+                    <GradientCircle src={profileImages[s.profile]} />
+                    <p className="font-['Pretendard:Medium',sans-serif] text-[#acb0b9] text-[12px] text-center whitespace-nowrap">{s.nick}</p>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
@@ -712,7 +770,7 @@ export default function App() {
             </div>
             <div className="flex gap-[12px] items-start px-[12px] overflow-x-auto pb-[4px]" style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}>
               {RECOMMENDED_STREAMERS.map((streamer) => (
-                <StreamerCard key={streamer.id} streamer={streamer} />
+                <StreamerCard key={streamer.id} streamer={streamer} onStreamClick={(stream) => setActiveStream(stream)} />
               ))}
             </div>
           </div>
@@ -741,12 +799,23 @@ export default function App() {
               {/* Profile row */}
               <div className="pt-[8px] pb-[8px]">
                 <div className="flex gap-[10px] items-start px-[12px] overflow-x-auto" style={{ scrollbarWidth: "none" }}>
-                  {STREAMERS.map((s, i) => (
-                    <div key={i} className="flex flex-col gap-[4px] items-center shrink-0">
-                      <GradientCircle src={profileImages[s.profile]} />
-                      <p className="font-['Pretendard:Medium',sans-serif] text-[#acb0b9] text-[12px] text-center whitespace-nowrap">{s.nick}</p>
-                    </div>
-                  ))}
+                  {STREAMERS.map((s, i) => {
+                    const isLiveStreamer = LIVE_STREAMS.some(stream => stream.profileImg === s.profile);
+                    const liveStream = LIVE_STREAMS.find(stream => stream.profileImg === s.profile);
+                    return (
+                      <button
+                        key={i}
+                        onClick={() => {
+                          if (isLiveStreamer && liveStream) setActiveStream(liveStream);
+                        }}
+                        disabled={!isLiveStreamer}
+                        className="flex flex-col gap-[4px] items-center shrink-0 bg-none border-none p-0 cursor-pointer disabled:cursor-default"
+                      >
+                        <GradientCircle src={profileImages[s.profile]} />
+                        <p className="font-['Pretendard:Medium',sans-serif] text-[#acb0b9] text-[12px] text-center whitespace-nowrap">{s.nick}</p>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -822,7 +891,7 @@ export default function App() {
                 </div>
                 <div className="flex gap-[12px] items-start px-[12px] overflow-x-auto pb-[4px]" style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}>
                   {RECOMMENDED_STREAMERS.map((streamer) => (
-                    <StreamerCard key={streamer.id} streamer={streamer} />
+                    <StreamerCard key={streamer.id} streamer={streamer} onStreamClick={(stream) => setActiveStream(stream)} />
                   ))}
                 </div>
               </div>
@@ -863,11 +932,11 @@ export default function App() {
         {/* Bottom nav */}
         <div className="shrink-0 border-t border-[#2a2d35] flex items-center bg-[#17191c] pb-[safe-area-inset-bottom]">
           {[
-            { label: "홈", icon: "M10 2L2 9h2v8h5v-5h2v5h5V9h2L10 2z" },
-            { label: "e스포츠", icon: "M5 6h14c1.1 0 2 .9 2 2v8c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V8c0-1.1.9-2 2-2zm1 2v6h12V8H6z" },
-            { label: "Catch", icon: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 16c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm0-9.5c-1.38 0-2.5 1.12-2.5 2.5s1.12 2.5 2.5 2.5 2.5-1.12 2.5-2.5-1.12-2.5-2.5-2.5z" },
-            { label: "MY", icon: "M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" },
-            { label: "더보기", icon: "M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z" },
+            { label: "홈", icon: "home" },
+            { label: "e스포츠", icon: "esports" },
+            { label: "Catch", icon: "catch" },
+            { label: "MY", icon: "my" },
+            { label: "더보기", icon: "more" },
           ].map((item, i) => (
             <button
               key={i}
@@ -875,9 +944,7 @@ export default function App() {
               className="flex-1 flex flex-col items-center justify-center gap-[4px] py-[8px]"
             >
               <div className="h-[24px] flex items-center justify-center">
-                <svg width="20" height="20" fill={bottomNav === i ? "#0082FF" : "none"} viewBox="0 0 24 24" stroke={bottomNav === i ? "#0082FF" : "#757b8a"} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d={item.icon} />
-                </svg>
+                <NavIcon icon={item.icon} color={bottomNav === i ? "#0082FF" : "#757b8a"} />
               </div>
               <span
                 className="font-['Pretendard:Medium',sans-serif] text-[10px] leading-tight"
