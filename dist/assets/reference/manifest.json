@@ -1,0 +1,58 @@
+{
+  "source": "https://x-ll-p-a8b2c4.web.app/",
+  "capturedAt": "2026-06-09T13:40:21.100Z",
+  "assets": [
+    {
+      "url": "https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css",
+      "type": "stylesheet"
+    },
+    {
+      "url": "https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Bold.woff2",
+      "type": "font"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop",
+      "type": "image"
+    },
+    {
+      "url": "https://res.cloudinary.com/dqlcjjm9b/video/upload/q_auto/v1775119076/4_cineti_x8wnq8.mp4",
+      "type": "media"
+    },
+    {
+      "url": "https://res.cloudinary.com/dqlcjjm9b/video/upload/q_auto/v1775119076/4_cineti_x8wnq8.mp4#t=0.001",
+      "type": "media"
+    },
+    {
+      "url": "https://res.cloudinary.com/dqlcjjm9b/video/upload/q_auto/v1775119092/2_gamst_vt6nnk.mp4#t=0.001",
+      "type": "media"
+    },
+    {
+      "url": "https://res.cloudinary.com/dqlcjjm9b/video/upload/q_auto/v1775119095/0_minkyo_gi0ioe.mp4",
+      "type": "media"
+    },
+    {
+      "url": "https://res.cloudinary.com/dqlcjjm9b/video/upload/q_auto/v1775119095/0_minkyo_gi0ioe.mp4#t=0.001",
+      "type": "media"
+    },
+    {
+      "url": "https://res.cloudinary.com/dqlcjjm9b/video/upload/q_auto/v1775119101/1_gomi_pewdfm.mp4#t=0.001",
+      "type": "media"
+    },
+    {
+      "url": "https://res.cloudinary.com/dqlcjjm9b/video/upload/q_auto/v1775119105/3_namsoon_neoij4.mp4#t=0.001",
+      "type": "media"
+    },
+    {
+      "url": "https://x-ll-p-a8b2c4.web.app/assets/index-dWrEfXEq.js",
+      "type": "script"
+    },
+    {
+      "url": "https://x-ll-p-a8b2c4.web.app/assets/index-DwYyGHFL.css",
+      "type": "stylesheet"
+    },
+    {
+      "url": "https://x-ll-p-a8b2c4.web.app/assets/mercedes_ad-CnD5m54f.png",
+      "type": "image"
+    }
+  ]
+}
