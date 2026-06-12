@@ -2112,6 +2112,129 @@ button {
   flex: 0 0 auto;
 }
 
+.streamer-scroll {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 0;
+  margin: 0;
+  margin-left: -12px;
+  padding-left: 12px;
+  scrollbar-width: none;
+}
+
+.streamer-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.streamer-card {
+  flex: 0 0 auto;
+  position: relative;
+  width: 146px;
+  height: 240px;
+  border-radius: 12px;
+  overflow: hidden;
+  padding: 0;
+}
+
+.streamer-card-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.streamer-card-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.85) 30%, rgba(0, 0, 0, 0.4) 70%, transparent 100%);
+  z-index: 1;
+}
+
+.streamer-avatar-wrapper {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  padding: 2px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  margin-bottom: 6px;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.streamer-avatar-wrapper.live {
+  background: conic-gradient(from 0deg, #0082FF, #0A96FF, #05BCFF, #00F0FF, #04F0FC, #10F1F5, #24F4E8, #40F7D7, #64FBC1, #82FFB0, #0082FF);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), 0 0 16px rgba(0, 130, 255, 0.5);
+}
+
+.streamer-avatar-wrapper button {
+  border: none;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.streamer-avatar {
+  width: 66px;
+  height: 66px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+.streamer-name {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: white;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.streamer-follow-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+
+.streamer-follow-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.streamer-follow-btn.following {
+  background: rgba(255, 215, 0, 0.2);
+  border-color: rgba(255, 215, 0, 0.4);
+  color: #FFD700;
+}
+
 @media (max-width: 374px) {
   .top-nav {
     gap: 7px;

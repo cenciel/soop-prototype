@@ -365,15 +365,16 @@ export function RecommendScreen({ onOpenPlayer }: RecommendScreenProps) {
             <div key={broadcaster.id} className="streamer-card">
               <video src={liveItems[index % liveItems.length].media} autoPlay muted playsInline loop className="streamer-card-video" />
               <div className="streamer-card-content">
-                <button
-                  type="button"
-                  className={`streamer-avatar-wrapper ${broadcaster.isLive ? 'live' : ''}`}
-                  onClick={() => onOpenPlayer(liveItems[index % liveItems.length].id)}
-                  aria-label={`open ${broadcaster.name}'s live`}
-                  style={{ border: 'none', padding: 0, cursor: 'pointer' }}
-                >
-                  <img src={broadcaster.avatar} alt={broadcaster.name} className="streamer-avatar" />
-                </button>
+                <div className={`streamer-avatar-wrapper ${broadcaster.isLive ? 'live' : ''}`}>
+                  <button
+                    type="button"
+                    onClick={() => onOpenPlayer(liveItems[index % liveItems.length].id)}
+                    aria-label={`open ${broadcaster.name}'s live`}
+                    style={{ border: 'none', padding: 0, background: 'none', cursor: 'pointer', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  >
+                    <img src={broadcaster.avatar} alt={broadcaster.name} className="streamer-avatar" />
+                  </button>
+                </div>
                 <p className="streamer-name">{broadcaster.name}</p>
                 <button
                   className={`streamer-follow-btn ${followState[broadcaster.id] ? 'following' : ''}`}
