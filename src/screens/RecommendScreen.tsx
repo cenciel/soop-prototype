@@ -1,12 +1,16 @@
 import { useRef, useState, type PointerEvent, type TouchEvent } from 'react';
-import { ChevronRight, MoreVertical } from 'lucide-react';
+import { ChevronRight, MoreVertical, Star } from 'lucide-react';
 import { BroadcasterStrip } from '../components/BroadcasterStrip';
 import { ViewerBadge } from '../components/ViewerBadge';
 import { LiveCard } from '../components/LiveCard';
-import { broadcasters, liveItems, recommendHero, recommendFeed, vodItems } from '../data/mockData';
+import { broadcasters, recommendedStreamers, liveItems, recommendHero, recommendFeed, vodItems } from '../data/mockData';
 
 type RecommendScreenProps = {
   onOpenPlayer: (id: string) => void;
+};
+
+type FollowState = {
+  [key: string]: boolean;
 };
 
 const heroSlides = [
@@ -51,9 +55,17 @@ const heroSlides = [
 
 export function RecommendScreen({ onOpenPlayer }: RecommendScreenProps) {
   const [activeSlide, setActiveSlide] = useState(0);
+  const [followState, setFollowState] = useState<FollowState>({});
   const touchStartX = useRef<number | null>(null);
   const pointerStartX = useRef<number | null>(null);
   const didSwipe = useRef(false);
+
+  const toggleFollow = (broadcasterId: string) => {
+    setFollowState((prev) => ({
+      ...prev,
+      [broadcasterId]: !prev[broadcasterId],
+    }));
+  };
 
   const activeHero = heroSlides[activeSlide];
 
@@ -336,6 +348,45 @@ export function RecommendScreen({ onOpenPlayer }: RecommendScreenProps) {
               </div>
                 <button type="button" className="vod-more-button" aria-label="more options">
                   <MoreVertical size={18} />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 추천 스트리머 */}
+      <section className="recommend-section streamer-section" aria-label="recommended streamers">
+        <div className="section-header">
+          <h2>추천 스트리머</h2>
+        </div>
+        <div className="streamer-scroll">
+          {recommendedStreamers.map((broadcaster, index) => (
+            <div key={broadcaster.id} className="streamer-card">
+              <video src={liveItems[index % liveItems.length].media} autoPlay muted playsInline loop className="streamer-card-video" />
+              <div className="streamer-card-content">
+                <button
+                  type="button"
+                  className={`streamer-avatar-wrapper ${broadcaster.isLive ? 'live' : ''}`}
+                  onClick={() => onOpenPlayer(liveItems[index % liveItems.length].id)}
+                  aria-label={`open ${broadcaster.name}'s live`}
+                  style={{ border: 'none', padding: 0, cursor: 'pointer' }}
+                >
+                  <img src={broadcaster.avatar} alt={broadcaster.name} className="streamer-avatar" />
+                </button>
+                <p className="streamer-name">{broadcaster.name}</p>
+                <button
+                  className={`streamer-follow-btn ${followState[broadcaster.id] ? 'following' : ''}`}
+                  onClick={() => toggleFollow(broadcaster.id)}
+                  aria-label={followState[broadcaster.id] ? 'Remove from favorites' : 'Add to favorites'}
+                >
+                  <Star
+                    size={16}
+                    fill={followState[broadcaster.id] ? '#FFD700' : 'none'}
+                    color={followState[broadcaster.id] ? '#FFD700' : 'currentColor'}
+                    strokeWidth={followState[broadcaster.id] ? 0 : 2}
+                  />
+                  <span>{followState[broadcaster.id] ? '즐겨찾기' : '즐겨찾기'}</span>
                 </button>
               </div>
             </div>

@@ -11,6 +11,7 @@ export type Broadcaster = {
   id: string;
   name: string;
   avatar: string;
+  isLive?: boolean;
 };
 
 export type LiveItem = {
@@ -182,6 +183,39 @@ export const broadcasters: Broadcaster[] = [
     id: 'jjam',
     name: '짬타수아',
     avatar: '/assets/reference/avatar-jjam.jpg',
+  },
+];
+
+export const recommendedStreamers: Broadcaster[] = [
+  {
+    id: 'nova',
+    name: '노바',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop',
+    isLive: true,
+  },
+  {
+    id: 'luna',
+    name: '루나✨',
+    avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop',
+    isLive: true,
+  },
+  {
+    id: 'raven',
+    name: '레이븐',
+    avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop',
+    isLive: true,
+  },
+  {
+    id: 'echo',
+    name: '에코',
+    avatar: 'https://images.unsplash.com/photo-1517849845537-1d51a20414de?w=100&h=100&fit=crop',
+    isLive: false,
+  },
+  {
+    id: 'iris',
+    name: '아이리스',
+    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop',
+    isLive: true,
   },
 ];
 
